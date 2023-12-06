@@ -1,30 +1,38 @@
-
+const axios = require('axios');
 const asyncHandler = require('express-async-handler');
-const { ObjectId } = require("mongodb");
 const Query = require('../models/querymodel');
 
 const getQueries =asyncHandler(async(req, res) => {
-    const queries=await Query.find({user_id: req.user.id});
+    const queries=await Query.find({user_id: req.user_id});
     res.json(queries);
 });
 
 const createQuery =asyncHandler(async(req, res) => {
-    console.log(req.body);
-    const {query}=req.body;
-
-    if(!query){
-        return res.status(400).json({message: 'no query entered'});
+    // console.log(req.body);
+    const query=req.body.query;
+    const user_id=req.body.user_id;
+    if(!query || !user_id){
+        return res.status(400).json({message: 'Please enter your query and user_id'});
     }
-    console.log('user_id:', req.user._id);
-    console.log('query:', query);
-    const newQuery = new Query({
-        user_id: req.user.id,
-        query
-    });
-    
     try {
-        const createdQuery = await newQuery.save();
-        res.status(201).json(createdQuery);
+        const newQuery = new Query({
+            user_id: user_id,
+            query: query
+        });    
+        // enter flask url in next line
+        const result = await axios.post('http://localhost:8000/api/processquery', {
+            "query": query
+        });
+        if (result.status === 200) {
+            const q = await newQuery.save();
+            res.status(201).json({
+                query: q,
+                response: result.data
+            });
+        }
+        else {
+            res.status(400).json({message: 'Error processing query'});
+        }
     } catch (error) {
         console.error('Error saving query:', error);
         throw error;
