@@ -3,6 +3,11 @@ const jwt=require("jsonwebtoken");
 
 const validate= asyncHandler(async(req,res,next)=>{
   const authHeader=req.headers.Authorization||req.headers.authorization;
+  if(!authHeader)
+  {
+      res.status(401);
+      throw new Error("Not authorized, no token");
+  }
   let token;
   
   if(authHeader && authHeader.startsWith("Bearer"))

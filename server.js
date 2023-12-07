@@ -15,6 +15,7 @@ const app = express();
 
 const port = process.env.PORT || 6900;
 
+
 app.use(express.json());
 
 app.use(morgan('dev'));
@@ -23,7 +24,6 @@ app.use('/api/queries', require('./routes/queryRoute'));
 
 app.use('/api/users',require('./routes/userRoute'));
 
-app.use(errorHandler);
 
 
 app.listen(port, () =>{

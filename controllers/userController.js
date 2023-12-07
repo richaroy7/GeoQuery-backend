@@ -3,13 +3,13 @@ const User = require('../models/usermodel');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const registerUser = asyncHandler(async(req, res) => {
-    const {username,email,password}=req.body;
-    if(!username || !email || !password)
+    const {first_name,last_name,username,password}=req.body;
+    if(!first_name || !last_name || !username || !password)
     {
         res.status(400);
         throw new Error("Please enter all the fields");
     }
-    const userAvailable = await User.findOne({email});
+    const userAvailable = await User.findOne({username});
     if(userAvailable)
     {
         res.status(400);
@@ -17,8 +17,9 @@ const registerUser = asyncHandler(async(req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password,10);
     const newUser = new User({ 
+        first_name,
+        last_name,
         username,
-        email,
         password:hashedPassword 
     });
     const createdUser = await newUser.save();
@@ -26,7 +27,7 @@ const registerUser = asyncHandler(async(req, res) => {
     console.log("The created user is :",createdUser);
     if(createdUser)
     {
-        res.status(201).json({_id:createdUser._id, email:createdUser.email});
+        res.status(201).json({_id:createdUser._id, username:createdUser.username});
     }
     else
     {
@@ -36,20 +37,21 @@ const registerUser = asyncHandler(async(req, res) => {
 });
 
 const loginUser = asyncHandler(async(req, res) => {
-    const {email,password}=req.body;
-    if(!email || !password)
+    const {username,password}=req.body;
+    if(!username || !password)
     {
         res.status(400);
-        throw new Error("Please enter the email and password");
+        throw new Error("Please enter the username and password");
     }
-    const user = await User.findOne({email});
+    const user = await User.findOne({username});
     
     if(user && ( await bcrypt.compare(password,user.password)))
     {
         const token=jwt.sign({
             user:{
                 username:user.username,
-                email:user.email,
+                first_name:user.first_name,
+                last_name:user.last_name,
                 id:user._id
         }},process.env.JWT_SECRET,{expiresIn:"1h"});//expires in 1 hour
         res.status(200).json({token});
