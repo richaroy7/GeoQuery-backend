@@ -6,6 +6,7 @@ const { connect } = require('mongoose');
 const connectDB = require('./config/dbConnection');
 dotenv.config();
 const morgan = require('morgan');
+const cors = require('cors');
 
 //herewegoagain123
 
@@ -19,6 +20,8 @@ const port = process.env.PORT || 6900;
 app.use(express.json());
 
 app.use(morgan('dev'));
+
+app.use(cors());
 
 app.use('/api/queries', require('./routes/queryRoute'));
 

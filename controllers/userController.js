@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const registerUser = asyncHandler(async(req, res) => {
     const {first_name,last_name,username,password}=req.body;
+    console.log("The request body is :",req.body);
     if(!first_name || !last_name || !username || !password)
     {
         res.status(400);
