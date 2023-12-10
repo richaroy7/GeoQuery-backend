@@ -6,6 +6,7 @@ const { connect } = require('mongoose');
 const connectDB = require('./config/dbConnection');
 dotenv.config();
 const morgan = require('morgan');
+const {createProxyMiddleware} = require("http-proxy-middleware");
 
 //herewegoagain123
 
@@ -23,6 +24,17 @@ app.use(morgan('dev'));
 app.use('/api/queries', require('./routes/queryRoute'));
 
 app.use('/api/users',require('./routes/userRoute'));
+app.use(
+    '/api/processquery',
+    createProxyMiddleware({
+      target: 'http://127.0.0.1:5000',
+      changeOrigin: true,
+      logLevel: 'debug',
+      pathRewrite: {
+        '/api/processquery': 'http://127.0.0.1:5000/api/processquery',
+      },
+    }),
+);
 
 
 
