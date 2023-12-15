@@ -8,7 +8,7 @@ const createLocation = asyncHandler(async(req, res) => {
         return res.status(400).json({message: 'Please enter your location'});
     }
     try {
-        const result = await axios.post('http://localhost:8000/api/ngindex', {
+        const result = await axios.post('http://127.0.0.1:5000/api/ngindex', {
             "loc": loc
         });
         if (result.status === 200) {
@@ -32,8 +32,11 @@ const deleteLocation = asyncHandler(async(req, res) => {
         return res.status(400).json({message: 'Please enter your location'});
     }
     try {
-        const result = await axios.delete('http://localhost:8000/api/ngindex', {
-            "loc": loc
+        const payload = {
+            "loc" : loc
+        };
+        const result = await axios.delete('http://127.0.0.1:5000/api/ngindex', {
+            data : payload
         });
         if (result.status === 200) {
             res.status(201).json({
@@ -57,7 +60,7 @@ const updateLocation = asyncHandler(async(req, res) => {
         return res.status(400).json({message: 'Please enter both old and new location'});
     }
     try {
-        const result = await axios.put('http://localhost:8000/api/ngindex', {
+        const result = await axios.put('http://127.0.0.1:5000/api/ngindex', {
             "old_loc": old_loc,
             "new_loc": new_loc
         });

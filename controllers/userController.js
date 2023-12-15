@@ -53,7 +53,8 @@ const loginUser = asyncHandler(async(req, res) => {
                 username:user.username,
                 first_name:user.first_name,
                 last_name:user.last_name,
-                id:user._id
+                id:user._id,
+                admin:user.admin,
         }},process.env.JWT_SECRET,{expiresIn:"1h"});//expires in 1 hour
         res.status(200).json({token});
     }
