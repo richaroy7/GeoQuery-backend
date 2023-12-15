@@ -24,6 +24,7 @@ app.use(morgan('dev'));
 app.use(cors());
 
 app.use('/api/queries', require('./routes/queryRoute'));
+app.use('/api/data', require('./routes/dataRoute'));
 
 app.use('/api/users',require('./routes/userRoute'));
 
