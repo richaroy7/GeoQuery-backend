@@ -6,7 +6,6 @@ const { connect } = require('mongoose');
 const connectDB = require('./config/dbConnection');
 dotenv.config();
 const morgan = require('morgan');
-const {createProxyMiddleware} = require("http-proxy-middleware");
 
 //herewegoagain123
 
@@ -21,7 +20,10 @@ app.use(express.json());
 
 app.use(morgan('dev'));
 
+app.use(cors());
+
 app.use('/api/queries', require('./routes/queryRoute'));
+app.use('/api/data', require('./routes/dataRoute'));
 
 app.use('/api/users',require('./routes/userRoute'));
 app.use(
