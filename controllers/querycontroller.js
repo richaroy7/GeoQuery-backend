@@ -29,6 +29,20 @@ const createQuery =asyncHandler(async(req, res) => {
         {
             const q = await newQuery.save();
 
+            const fuzzy = result.data.fuzzy_matches;
+            const tokens = result.data.loc_tokens;
+            let st = []
+            
+            for(let i=0;i<tokens.length;i++){
+                for(let j=0;j<fuzzy[tokens[i][0]].length;j++){
+                    
+                    let cat = await Location.findOne({name : fuzzy[tokens[i][0]][j][0].toString().toLowerCase()});
+
+                    fuzzy[tokens[i][0]][j].push(cat.category);
+
+                }
+            }
+
             res.status(201).json({
                 query: q,
                 response: result.data
