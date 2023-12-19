@@ -3,18 +3,35 @@ const asyncHandler = require('express-async-handler');
 
 const createLocation = asyncHandler(async(req, res) => {
     const loc=req.body.loc;
+    const category=req.body.category;
 
     if(!loc){
         return res.status(400).json({message: 'Please enter your location'});
+    }
+    if(!category){
+        return res.status(400).json({message: 'Please enter the category'});
     }
     try {
         const result = await axios.post('http://127.0.0.1:5000/api/ngindex', {
             "loc": loc
         });
         if (result.status === 200) {
+
+            const location= new Location({
+                name: loc,
+                category: category
+        });
+        try {
+            const savedLocation = await location.save();
+            console.log('Location saved:', savedLocation);
+        } catch (error) {
+            console.error('Error saving location:', error);
+        }
+
             res.status(201).json({
                 response: result.data
             });
+
         }
         else {
             res.status(400).json({message: 'Error processing location'});

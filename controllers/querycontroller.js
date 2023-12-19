@@ -1,6 +1,7 @@
 const axios = require('axios');
 const asyncHandler = require('express-async-handler');
 const Query = require('../models/querymodel');
+const Location = require('./models/Location'); 
 
 const getQueries =asyncHandler(async(req, res) => {
     const queries=await Query.find({user_id: req.user.id});
@@ -24,14 +25,17 @@ const createQuery =asyncHandler(async(req, res) => {
         const result = await axios.post('http://127.0.0.1:8000/api/processquery', {
             "query": query
         });
-        if (result.status === 200) {
+        if (result.status === 200) 
+        {
             const q = await newQuery.save();
+
             res.status(201).json({
                 query: q,
                 response: result.data
             });
         }
-        else {
+        else 
+        {
             res.status(400).json({message: 'Error processing query'});
         }
     } catch (error) {
