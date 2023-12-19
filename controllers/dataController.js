@@ -1,5 +1,6 @@
 const axios = require('axios');
 const asyncHandler = require('express-async-handler');
+const Location = require('../models/locationmodel'); 
 
 const createLocation = asyncHandler(async(req, res) => {
     const loc=req.body.loc;

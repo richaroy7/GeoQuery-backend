@@ -1,7 +1,7 @@
 const axios = require('axios');
 const asyncHandler = require('express-async-handler');
 const Query = require('../models/querymodel');
-const Location = require('./models/Location'); 
+const Location = require('../models/locationmodel'); 
 
 const getQueries =asyncHandler(async(req, res) => {
     const queries=await Query.find({user_id: req.user.id});
