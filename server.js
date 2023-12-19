@@ -32,7 +32,7 @@ app.use('/api/users', require('./routes/userRoute'));
 app.get('/api/usage', async (req, res) => {
   os.cpuUsage((v) => {
     console.log('CPU Usage (%): ' + v);
-    return res.json({
+    return res.status(200).json({
       usage: v*100.0,
     });
   })

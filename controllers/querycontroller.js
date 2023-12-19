@@ -21,7 +21,7 @@ const createQuery =asyncHandler(async(req, res) => {
             query: query
         });    
         //enter flask url in next line
-        const result = await axios.post('http://127.0.0.1:8000/api/processquery', {
+        const result = await axios.post('http://127.0.0.1:5000/api/processquery', {
             "query": query
         });
         if (result.status === 200) {
