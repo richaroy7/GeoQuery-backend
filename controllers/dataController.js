@@ -19,9 +19,9 @@ const createLocation = asyncHandler(async(req, res) => {
         if (result.status === 200) {
 
             const location= new Location({
-                name: loc,
+                name: loc.replace(/\s/g, '').toLowerCase(),
                 category: category
-        });
+            });
         try {
             const savedLocation = await location.save();
             console.log('Location saved:', savedLocation);
